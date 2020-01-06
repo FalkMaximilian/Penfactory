@@ -1,5 +1,3 @@
-public int maxLength = 20;
-
 /**
 * Die Klasse Artikel besitzt die Attribute "produktbezeichnung", "kategorie",
 * "anzahl", "gewicht", "preis" und "platzNummer".
@@ -133,7 +131,7 @@ public class Artikel {
 	* @return boolean Wenn die neue {@link #produktBezeichnung} erfolgreich zugewiesen wurde, wird true zurückgegeben. In allen anderen Fällen false.
 	*/
 	public boolean setName(String neuName) {
-		if (neuName.length() > maxLength) {
+		if (neuName.length() > 20) {
 			System.out.println("SET: setName() failed -> Input too long");
 			return false;
 		} else {
@@ -149,7 +147,7 @@ public class Artikel {
 	* @return boolean Wenn die neue {@link #kategorie} erfolgreich zugewiesen wurde, wird true zurückgegeben. In allen anderen Fällen false.
 	*/
 	public boolean setKategorie(String neuKategorie) {
-		if (neuKategorie.length() > maxLength) {
+		if (neuKategorie.length() > 20) {
 			System.out.println("SET: setKategorie() failed -> Input too long");
 			return false;
 		} else {
@@ -234,7 +232,7 @@ public class Artikel {
 			return false;
 		} else {
 			this.anzahl = this.anzahl + delta;
-			System.out.ptintln("CHANGE: anzahl was changed by " + delta);
+			System.out.println("CHANGE: anzahl was changed by " + delta);
 			return true;
 		}
 	}
