@@ -106,7 +106,8 @@ public class Artikel {
 			return false;
 		} else {
 			this.preis = newPreis;
-			System.out.println("SET: preis was set to: " + newPreis)
+			System.out.println("SET: preis was set to: " + newPreis);
+			return true;
 		}
 	}
 	
