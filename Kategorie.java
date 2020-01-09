@@ -76,7 +76,7 @@ public class Kategorie {
 	
 	// In- and Decrease
 	/**
-	* Erhöhe die {@link artikelAnzahl} der unter dieser Kategorie gespeicherten Artikel um 1.
+	* Erhöhe die {@link #artikelAnzahl} der unter dieser Kategorie gespeicherten Artikel um 1.
 	*/
 	public void increase() {
 		this.artikelAnzahl += 1;

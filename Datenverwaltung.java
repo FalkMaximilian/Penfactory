@@ -44,6 +44,15 @@ public abstract class Datenverwaltung {
 		}
 	}
 	
+	/**
+	 * Diese funktion dient zum suchen nach {@link Artikel}n welche dem Eingabewert in entsprechender Eigenschaft entsprechen. Für den Fall dass nach
+	 * einem ungültigen oder falschen Wert gesucht wird, wird eine leere Liste zurückgegeben.
+	 * 
+	 * @param wert Der Wert nachdem gesucht wird im String Format.
+	 * @param para Die {@link Eigenschaft} nach welcher gesucht wird.
+	 * @return List<{@link Artikel}> Es wird immer eine Liste zurückgegeben. Im Falle eines Fehlers wird eine leere Liste zurückgegeben und
+	 *  auf der Konsole wird eine entsprechende Meldung ausgegeben.
+	 */
 	public List<Artikel> search(String wert, Eigenschaft para) {
 		List<Artikel> searchResult = new ArrayList<>(); // Eine leere Liste, die am Ende mit allen gefundenen Objekten zurückgegeben wird.
 		int a_list_size = a_list.size();				// Länge der Liste
@@ -159,12 +168,58 @@ public abstract class Datenverwaltung {
 	public void load() {
 		
 	}
-
-	public static Artikel getArtikel(String name) {
-		return null;
+	
+	public void save(Artikel a) {
+		
 	}
-
-	public static void addArtikel(List<Artikel> a_list) {
-		Datenverwaltung.a_list = a_list;
+	
+	public void save(Kategorie k) {
+		
+	}
+	
+	public boolean addArtikel(Artikel neuerArtikel) {
+		
+	}
+	
+	public Artikel getArtikel(String name) {
+		
+	}
+	
+	public boolean changeArtikel(String name, Artikel a) {
+		
+	}
+	
+	public boolean deleteArtikel(String name) {
+		
+	}
+	
+	public Kategorie getKategorie(String name) {
+		
+	}
+	
+	public boolean addKategorie(Kategorie k) {
+		
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
