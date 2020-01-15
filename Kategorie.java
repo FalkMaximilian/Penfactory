@@ -96,4 +96,12 @@ public class Kategorie {
 			return true;
 		}
 	}
+	
+	public boolean equals(Kategorie b) {
+		if (this.name.toLowerCase() == b.name.toLowerCase() && this.artikelAnzahl == b.artikelAnzahl) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

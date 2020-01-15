@@ -236,4 +236,12 @@ public class Artikel {
 			return true;
 		}
 	}
+	
+	public boolean equals(Artikel b) {
+		if (this.produktBezeichnung.toLowerCase() == b.produktBezeichnung.toLowerCase() && this.kategorie.toLowerCase() == b.kategorie.toLowerCase() && this.anzahl == b.anzahl && this.gewicht == b.gewicht && this.preis == b.preis && this.platzNummer == b.platzNummer) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
