@@ -1,5 +1,6 @@
 
 public enum Eigenschaft {
+	Alle,
 	Produktbezeichnung,
 	Kategorie,
 	Anzahl,

@@ -38,18 +38,37 @@ public class Datenverwaltung {
 	 * @return List<{@link Artikel}> Es wird immer eine Liste zurückgegeben. Im Falle eines Fehlers wird eine leere Liste zurückgegeben und
 	 *  auf der Konsole wird eine entsprechende Meldung ausgegeben.
 	 */
-	protected static List<Artikel> search(String wert, Eigenschaft para) {
+	protected static Artikel[] search(String wert, Eigenschaft para) {
 		List<Artikel> searchResult = new ArrayList<>(); // Eine leere Liste, die am Ende mit allen gefundenen Objekten zurückgegeben wird.
 		int a_list_size = a_list.size();				// Länge der Liste
 		
-		if (para == Eigenschaft.Produktbezeichnung) { 	// Wenn nach der Produktbezeichnung gesucht wird
+		if (para == Eigenschaft.Alle) {
+			for (int i = 0; i < a_list_size; i++) {
+				Artikel tempArtikel = a_list.get(i);
+				
+				if (tempArtikel.produktBezeichnung.contains(wert)) {
+					searchResult.add(tempArtikel);
+				} else if (tempArtikel.kategorie.contains(wert)) {
+					searchResult.add(tempArtikel);
+				} else if (Integer.toString(tempArtikel.anzahl).contains(wert)) {
+					searchResult.add(tempArtikel);
+				} else if (Double.toString(tempArtikel.gewicht).contains(wert)) {
+					searchResult.add(tempArtikel);
+				} else if (Double.toString(tempArtikel.preis).contains(wert)) {
+					searchResult.add(tempArtikel);
+				} else if (Integer.toString(tempArtikel.platzNummer).contains(wert)) {
+					searchResult.add(tempArtikel);
+				}
+			}
+			return searchResult.toArray(new Artikel[0]);
+		} else if (para == Eigenschaft.Produktbezeichnung) { 	// Wenn nach der Produktbezeichnung gesucht wird
 			for (int i = 0; i < a_list_size; i++) {		// Überprüfe jedes Element der Liste
 				Artikel tempElement = a_list.get(i);	// Hole das aktuelle Element
 				if (tempElement.produktBezeichnung.contains(wert)) {
 					searchResult.add(tempElement);		// Wenn die Produktbezeichnung stimmt, füge es zur Liste hinzu
 				}
 			}
-			return searchResult;	// Nachdem alle Artikel überprüft wurden, gibt die Liste zurück
+			return searchResult.toArray(new Artikel[0]);	// Nachdem alle Artikel überprüft wurden, gibt die Liste zurück
 		} else if (para == Eigenschaft.Kategorie) {		// Wenn nach der Kategorie gesucht wird
 			for(int i = 0; i < a_list_size; i++) {		// Überprüfe jedes Element der Liste
 				Artikel tempElement = a_list.get(i);	// Hole das aktuelle Element der Liste
@@ -57,7 +76,7 @@ public class Datenverwaltung {
 					searchResult.add(tempElement);		// Wenn die Kategorie stimmt, füge es zur Liste hinzu
 				}
 			}
-			return searchResult;	// Nachdem alle Artikel überprüft wurden, gibt die Liste zurück
+			return searchResult.toArray(new Artikel[0]);	// Nachdem alle Artikel überprüft wurden, gibt die Liste zurück
 		} else if (para == Eigenschaft.Anzahl) {
 			
 			int wert_int;
@@ -65,12 +84,12 @@ public class Datenverwaltung {
 				wert_int = Integer.parseInt(wert);	// Try and convert the String to int
 			} catch (NumberFormatException e) {
 				System.out.println("DATENVERWALLTUNG -> SEARCH -> ANZAHL: Input konnte nicht zu int gecaster werden.");
-				return searchResult;	// Return an Empty List
+				return searchResult.toArray(new Artikel[0]);	// Return an Empty List
 			}
 			
 			if (wert_int < 0) {
 				System.out.println("DATENVERWALLTUNG -> SEARCH -> ANZAHL: Input ist ungültig");
-				return searchResult;	// Return an Empty List
+				return searchResult.toArray(new Artikel[0]);	// Return an Empty List
 			} else {
 				for (int i = 0; i < a_list_size; i++) {		// Überprüfe jedes Element der Liste
 					Artikel tempElement = a_list.get(i);	// Hole das aktuelle Element der Liste
@@ -78,7 +97,7 @@ public class Datenverwaltung {
 						searchResult.add(tempElement);	// Wenn die Anzahl stimmt, füge es zur Liste hinzu
 					}
 				}
-				return searchResult;	// Nachdem alle Artikel überprüft wurden, gibt die Liste zurück
+				return searchResult.toArray(new Artikel[0]);	// Nachdem alle Artikel überprüft wurden, gibt die Liste zurück
 			}
 		} else if (para == Eigenschaft.Gewicht) {
 			
@@ -87,12 +106,12 @@ public class Datenverwaltung {
 				wert_double = Double.parseDouble(wert);
 			} catch (NumberFormatException e) {
 				System.out.println("DATENVERWALTUNG -> SEARCH -> GEWICHT: Input konnte nicht zu double gecastet werden.");
-				return searchResult;	// Gib eine leere Liste zurück
+				return searchResult.toArray(new Artikel[0]);	// Gib eine leere Liste zurück
 			}
 			
 			if (wert_double < 0) {
 				System.out.println("DATENVERWALLTUNG -> SEARCH -> GEWICHT: Input ist ungültig");
-				return searchResult;	// Gib eine leere Liste zurück
+				return searchResult.toArray(new Artikel[0]);	// Gib eine leere Liste zurück
 			} else {
 				for (int i = 0; i < a_list_size; i++) {			// Überprüfe jedes Element der Liste
 					Artikel tempElement = a_list.get(i);		// Hole das aktuelle Element der Liste
@@ -100,7 +119,7 @@ public class Datenverwaltung {
 						searchResult.add(tempElement);	// Wenn das Gewicht stimmt, füge tempElement zur Liste hinzu
 					}
 				}
-				return searchResult;	// Nachdem alle Artikel überprüft wurden, gibt die Liste zurück
+				return searchResult.toArray(new Artikel[0]);	// Nachdem alle Artikel überprüft wurden, gibt die Liste zurück
 			}
 			
 		} else if (para == Eigenschaft.Preis) {
@@ -110,12 +129,12 @@ public class Datenverwaltung {
 				wert_double = Double.parseDouble(wert);
 			} catch (NumberFormatException e) {
 				System.out.println("DATENVERWALTUNG -> SEARCH -> PREIS: Input konnte nicht zu double gecastet werden.");
-				return searchResult;	// Gib eine leere Liste zurück
+				return searchResult.toArray(new Artikel[0]);	// Gib eine leere Liste zurück
 			}
 			
 			if (wert_double < 0) {
 				System.out.println("DATENVERWALLTUNG -> SEARCH -> PREIS: Input ist ungültig");
-				return searchResult;	// Gib eine leere Liste zurück
+				return searchResult.toArray(new Artikel[0]);	// Gib eine leere Liste zurück
 			} else {
 				for (int i = 0; i < a_list_size; i++) {			// Überprüfe jedes Element der Liste
 					Artikel tempElement = a_list.get(i);		// Hole das aktuelle Element der Liste
@@ -123,7 +142,7 @@ public class Datenverwaltung {
 						searchResult.add(tempElement);	// Wenn der Preis stimmt, füge tempElement zur Liste hinzu
 					}
 				}
-				return searchResult;	// Nachdem alle Artikel überprüft wurden, gibt die Liste zurück
+				return searchResult.toArray(new Artikel[0]);	// Nachdem alle Artikel überprüft wurden, gibt die Liste zurück
 			}
 		} else {
 			
@@ -132,12 +151,12 @@ public class Datenverwaltung {
 				wert_int = Integer.parseInt(wert);
 			} catch (Exception e) {
 				System.out.println("DATENVERWALLTUNG -> SEARCH -> PLATZNUMMER: Input konnte nicht zu int gecaster werden.");
-				return searchResult;	// Return an Empty List
+				return searchResult.toArray(new Artikel[0]);	// Return an Empty List
 			}
 			
 			if (wert_int < 0) {
 				System.out.println("DATENVERWALLTUNG -> SEARCH -> PLATZNUMMER: Input ist ungültig");
-				return searchResult;	// Return an Empty List
+				return searchResult.toArray(new Artikel[0]);	// Return an Empty List
 			} else {
 				for (int i = 0; i < a_list_size; i++) {
 					Artikel tempElement = a_list.get(i);
@@ -145,7 +164,7 @@ public class Datenverwaltung {
 						searchResult.add(tempElement);
 					}
 				}
-				return searchResult;
+				return searchResult.toArray(new Artikel[0]);
 			}
 		}
 	}
