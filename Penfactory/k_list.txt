@@ -1,6 +1,8 @@
 SchreibaredfgnƢ2
 SchreibarasdenƢ1
-StifteƢ1
-SchreibardfgenƢ1
+StifteƢ0
+SchreibardfgenƢ0
 SchreibargdfenƢ1
 MamaƢ0
+BecherƢ0
+GetränkeƢ0

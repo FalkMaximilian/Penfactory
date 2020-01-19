@@ -66,6 +66,7 @@ public class Artikel extends Object {
 			this.kategorie = kat;
 			this.anzahl = anz;
 			this.gewicht = gew;
+			this.preis = preis;
 			this.platzNummer = platz;
 		} else {
 			System.out.println("ARTIKEL -> ARTIKEL: Ein oder mehrere Parameter sind falsch");

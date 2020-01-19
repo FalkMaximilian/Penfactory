@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiArtikelAdd extends JFrame implements ActionListener{
+public class GuiArtikelAdd extends JFrame implements ActionListener {
 
     JFrame frame;
     ArrayList<String> kategorieListe = new ArrayList();
@@ -39,6 +39,7 @@ public class GuiArtikelAdd extends JFrame implements ActionListener{
     JPanel unten;
     GridBagConstraints gridOben;
     GridBagConstraints gridUnten;
+    
     
 
 
@@ -163,7 +164,6 @@ public class GuiArtikelAdd extends JFrame implements ActionListener{
         
         if (action.getSource() == btnKategorieAdd){
         		GuiKategorieAdd fenster = new GuiKategorieAdd();
-
         	}
 
         
@@ -195,5 +195,6 @@ public class GuiArtikelAdd extends JFrame implements ActionListener{
 
         	}
         }
-    }}
+    }
+}
 

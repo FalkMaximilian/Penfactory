@@ -47,6 +47,9 @@ public class GuiSafety implements ActionListener{
 				 boolean test = Src.Datenverwaltung.deleteArtikel(objName);
 		    	 if (test == false) {
 		    		 JOptionPane.showMessageDialog((Component)null, "Kategorie " + objName + " konnte nicht geloescht werden");
+		    	 } else {
+		    		 frame.dispose();
+		    		 JOptionPane.showMessageDialog((Component)null, "Kategorie " + objName + "wurde erfolgreich gelöscht!");
 		    	 }
 			 }
 			 if (obj == "artikel") {
@@ -54,6 +57,9 @@ public class GuiSafety implements ActionListener{
 				 boolean test = Src.Datenverwaltung.deleteArtikel(objName);
             	 if (test == false) {
             		 JOptionPane.showMessageDialog((Component)null, "Artikel " + objName + " konnte nicht geloescht werden");
+            	 } else {
+            		 frame.dispose();
+            		 JOptionPane.showMessageDialog((Component)null, "Artikel " + objName + "wurde erfolgreich gelöscht!");
             	 }
             	 
 			 }
