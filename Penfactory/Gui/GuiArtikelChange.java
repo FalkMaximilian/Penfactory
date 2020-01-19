@@ -3,11 +3,11 @@ package Gui;
 import java.awt.*;
 import javax.swing.*;
 
-import Src.Artikel;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.List;
+
 import Src.*;
 
 public class GuiArtikelChange extends JFrame implements ActionListener{
@@ -59,7 +59,12 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
         btnKategorieAdd = new JButton("Kategorie hinzufuegen");
         btnArtikelChange = new JButton("Okay");
         btnAbbrechen = new JButton("Abbrechen");
-        comboKategorie = new JComboBox(Src.Datenverwaltung.getKList().toArray());
+        List<Kategorie> kListe = Src.Datenverwaltung.getKList();
+		for(int i =0; i < kListe.size(); i++) {
+			Kategorie tmp = kListe.get(i);
+			kategorieListe.add(tmp.name);
+		}
+        comboKategorie = new JComboBox(kategorieListe.toArray());
         comboKategorie.setSelectedItem(artikel.kategorie);
         ganzes = new JPanel(new FlowLayout(1, 0, 0));
         oben = new JPanel(new GridBagLayout());
@@ -187,13 +192,18 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
                    	JOptionPane.showMessageDialog((Component)null, "Bitte fuellen Sie alle Felder korrekt aus");
                    }
                    else {
-          		
-          		Artikel neuerArtikel = new Src.Artikel(artikelBezeichnung, kategorie, anz, gew, price, number);
-          		Src.Datenverwaltung.changeArtikel(changeName, neuerArtikel);
-          		Src.Datenverwaltung.save_a_list();
-          		JOptionPane.showMessageDialog((Component)null, "Artikel " + artikelBezeichnung + " wurde veraendert");
-          		frame.dispose();
-          		GuiHauptfenster fenster = new GuiHauptfenster();
+                	   	
+                	   Artikel neuerArtikel = new Src.Artikel(artikelBezeichnung, kategorie, anz, gew, price, number);
+                	   boolean test = Src.Datenverwaltung.changeArtikel(changeName, neuerArtikel);
+                	   if (test == true) {
+                		   Src.Datenverwaltung.save_a_list();
+                		   JOptionPane.showMessageDialog((Component)null, "Artikel " + artikelBezeichnung + " wurde veraendert");
+                		   frame.dispose();
+                		   GuiHauptfenster fenster = new GuiHauptfenster();
+                		   }
+                	   else {
+                		   JOptionPane.showMessageDialog((Component)null, "Artikel " + artikelBezeichnung + " existiert nicht");
+                	   }
 
           	}
           }}

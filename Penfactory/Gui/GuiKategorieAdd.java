@@ -51,11 +51,18 @@ public class GuiKategorieAdd implements ActionListener{
                 String kategorieName = textName.getText();
 
                 if (action.getSource() == btnAddKategorie){
-                    frame.dispose();
+                    
                     Kategorie k =  new Src.Kategorie(kategorieName, 0);
-                    Src.Datenverwaltung.addKategorie(k);
-                    Src.Datenverwaltung.save_k_list();
-                    JOptionPane.showMessageDialog((Component)null, "Kategorie " + kategorieName + " wurde hinzugefuegt");
+                    boolean test = Src.Datenverwaltung.addKategorie(k);
+                    if (test==true) {
+                    	Src.Datenverwaltung.save_k_list();
+                    	JOptionPane.showMessageDialog((Component)null, "Kategorie " + kategorieName + " wurde hinzugefuegt");
+                    	frame.dispose();
+                    }
+                    else {
+                    	JOptionPane.showMessageDialog((Component)null, "Kategorie " + kategorieName + " existiert bereits");
+                    }
+                    
                 }
 
                 if (action.getSource() == btnAbbrechen){

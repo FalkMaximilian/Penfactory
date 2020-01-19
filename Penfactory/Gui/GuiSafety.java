@@ -44,13 +44,24 @@ public class GuiSafety implements ActionListener{
 	 public void actionPerformed(ActionEvent action){
 		 if (action.getSource() == btnJa){
 			 if (obj == "kategorie") {
-				 Src.Datenverwaltung.deleteArtikel(objName);
-		    	 Src.Datenverwaltung.save_k_list();
+				 boolean test = Src.Datenverwaltung.deleteArtikel(objName);
+		    	 if (test == true) {
+		    		 Src.Datenverwaltung.save_k_list();
+		    	 }
+		    	 else {
+		    		 JOptionPane.showMessageDialog((Component)null, "Kategorie " + objName + " konnte nicht geloescht werden");
+		    	 }
 			 }
 			 if (obj == "artikel") {
 
-            	 Src.Datenverwaltung.deleteArtikel(objName);
-            	 Src.Datenverwaltung.save_a_list();
+				 boolean test = Src.Datenverwaltung.deleteArtikel(objName);
+            	 if (test == true) {
+            		 Src.Datenverwaltung.save_a_list();
+            	 }
+            	 else {
+            		 JOptionPane.showMessageDialog((Component)null, "Artikel " + objName + " konnte nicht geloescht werden");
+            	 }
+            	 
 			 }
 		 }
 		 

@@ -14,6 +14,7 @@ public class GuiKategorie implements ActionListener{
 	JPanel panel;
 	GridBagConstraints gridPanel;
 	JFrame frame;
+	List<String> kategorieListe  =new ArrayList<>();;
 	JComboBox comboKategorie;
 	JButton btnBack = new JButton("Zurueck");
 	JButton btnKategorieChange = new JButton("Kategorie bearbeiten");
@@ -23,7 +24,12 @@ public class GuiKategorie implements ActionListener{
 	public GuiKategorie() {
 		frame = new JFrame("Kategorien: ");
 		frame.setSize(700,200);
-		comboKategorie = new JComboBox(Src.Datenverwaltung.getKList().toArray());
+		List<Kategorie> kListe = Src.Datenverwaltung.getKList();
+		for(int i =0; i < kListe.size(); i++) {
+			Kategorie tmp = kListe.get(i);
+			kategorieListe.add(tmp.name);
+		}
+		comboKategorie = new JComboBox(kategorieListe.toArray());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel = new JPanel(new GridBagLayout());
         btnBack.addActionListener(this);

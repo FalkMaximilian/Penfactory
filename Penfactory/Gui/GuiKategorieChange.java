@@ -54,10 +54,17 @@ public class GuiKategorieChange implements ActionListener {
 	                String neuName = textName.getText();
 
 	                if (action.getSource() == btnChangeKategorie){
-	                    frame.dispose();
-	                    Src.Datenverwaltung.changeKategorie(neuName, altKategorie);
-	                    JOptionPane.showMessageDialog((Component)null, "Kategorie " + altKategorie.name + "heisst jetz" + neuName);
-	                    Src.Datenverwaltung.save_a_list();
+	                    
+	                    boolean test = Src.Datenverwaltung.changeKategorie(neuName, altKategorie);
+	                    if (test == true) {
+	                    	JOptionPane.showMessageDialog((Component)null, "Kategorie " + altKategorie.name + "heisst jetz" + neuName);
+	                    	Src.Datenverwaltung.save_a_list();
+	                    	frame.dispose();
+	                    	}
+	                    else {
+	                    	JOptionPane.showMessageDialog((Component)null, "Kategorie " + altKategorie.name + " existiert nicht");
+	                    }
+	                    
 	                }
 
 	                if (action.getSource() == btnAbbrechen){

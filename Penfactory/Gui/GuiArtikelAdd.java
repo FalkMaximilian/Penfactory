@@ -4,10 +4,12 @@ import java.awt.*;
 import javax.swing.*;
 
 import Src.Artikel;
+import Src.Kategorie;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GuiArtikelAdd extends JFrame implements ActionListener{
 
@@ -37,6 +39,7 @@ public class GuiArtikelAdd extends JFrame implements ActionListener{
     JPanel unten;
     GridBagConstraints gridOben;
     GridBagConstraints gridUnten;
+    
 
 
     public GuiArtikelAdd() {
@@ -46,6 +49,11 @@ public class GuiArtikelAdd extends JFrame implements ActionListener{
         btnKategorieAdd = new JButton("Kategorie hinzufuegen");
         btnArtikelAdd = new JButton("Okay");
         btnAbbrechen = new JButton("Abbrechen");
+        List<Kategorie> kListe = Src.Datenverwaltung.getKList();
+		for(int i =0; i < kListe.size(); i++) {
+			Kategorie tmp = kListe.get(i);
+			kategorieListe.add(tmp.name);
+		}
         comboKategorie = new JComboBox(kategorieListe.toArray());
         ganzes = new JPanel(new FlowLayout(1, 0, 0));
         oben = new JPanel(new GridBagLayout());
@@ -127,7 +135,7 @@ public class GuiArtikelAdd extends JFrame implements ActionListener{
         catch (NumberFormatException e) {
         	price = 0.00;
         }
-        String gewicht = textGewicht.getText();  //Casten!!!!
+        String gewicht = textGewicht.getText();  
         double gew;
         try {
         	gew = Double.parseDouble(gewicht);
@@ -175,11 +183,16 @@ public class GuiArtikelAdd extends JFrame implements ActionListener{
         	        else {
         		
         		Artikel neuerArtikel = new Src.Artikel(artikelBezeichnung, kategorie, anz, gew, price, number);
-        		Src.Datenverwaltung.addArtikel(neuerArtikel);
-        		Src.Datenverwaltung.save_a_list();
-        		JOptionPane.showMessageDialog((Component)null, "Artikel " + artikelBezeichnung + " wurde hinzugefuegt");
-        		frame.dispose();
-        		GuiHauptfenster fenster = new GuiHauptfenster();
+        		boolean test = Src.Datenverwaltung.addArtikel(neuerArtikel);
+        		if (test==true) {
+        			Src.Datenverwaltung.save_a_list();
+        			JOptionPane.showMessageDialog((Component)null, "Artikel " + artikelBezeichnung + " wurde hinzugefuegt");
+        			frame.dispose();
+        			GuiHauptfenster fenster = new GuiHauptfenster();
+        		}
+        		else {
+        			JOptionPane.showMessageDialog((Component)null, "Artikel " + artikelBezeichnung + " existiert bereits");
+        		}
 
         	}
         }
