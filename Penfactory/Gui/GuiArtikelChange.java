@@ -10,6 +10,10 @@ import java.util.List;
 
 import Src.*;
 
+/*
+ * Fenster zur Bearbeitung eines bereits bestehenden Artikels.
+ * Es ist zudem möglich eine neue Kategorie zu erstellen
+ */
 public class GuiArtikelChange extends JFrame implements ActionListener{
 
     JFrame frame;
@@ -42,11 +46,19 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
 
 
     public GuiArtikelChange(String artikelName) {
+    	
+    	//Speichern der alten Produktbezeichnung
     	changeName = artikelName;
+    	
+    	//Artikeldaten zum befüllen der Textxfelder und des Drop-Down-Menüs
     	Src.Artikel artikel = Src.Datenverwaltung.getArtikel(artikelName);
+    	
+    	//Erstellen des Grundgerüsts des Frames
         frame = new JFrame("Artikel veraendern");
         frame.setSize(800, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        //Artikeldaten in ihre Komponenten eintragen
         textBezeichnung.setText(artikel.produktBezeichnung);
         String anz = Integer.toString(artikel.anzahl);
         textAnzahl.setText(anz); 
@@ -66,14 +78,8 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
 		}
         comboKategorie = new JComboBox(kategorieListe.toArray());
         comboKategorie.setSelectedItem(artikel.kategorie);
-        ganzes = new JPanel(new FlowLayout(1, 0, 0));
-        oben = new JPanel(new GridBagLayout());
-        unten = new JPanel(new GridBagLayout());
-        gridOben = new GridBagConstraints();
-        gridUnten = new GridBagConstraints();
-        frame.getContentPane().add(ganzes);
-        ganzes.add(oben);
-        ganzes.add(unten);
+        
+        //ActionListener hinzufügen
         btnArtikelChange.addActionListener(this);
         btnAbbrechen.addActionListener(this);
         btnKategorieAdd.addActionListener(this);
@@ -82,6 +88,13 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
         textGewicht.addActionListener(this);
         textPlatznummer.addActionListener(this);
         comboKategorie.addActionListener(this);
+        
+        //Grid für den Frame erstellen und befüllen
+        ganzes = new JPanel(new FlowLayout(1, 0, 0));
+        oben = new JPanel(new GridBagLayout());
+        unten = new JPanel(new GridBagLayout());
+        gridOben = new GridBagConstraints();
+        gridUnten = new GridBagConstraints();
         gridOben.insets = new Insets(10,10,10,10);
         gridUnten.insets = new Insets(50,200,15,200);
         gridOben.gridx = 1;
@@ -132,12 +145,24 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
         unten.add(btnAbbrechen, gridUnten);
         gridUnten.gridx = 1;
         unten.add(btnArtikelChange, gridUnten);
+        
+        //Frame mit Panels füllen
+        ganzes.add(oben);
+        ganzes.add(unten);
+        frame.getContentPane().add(ganzes);
+        
+        //Frame für Benutzer sichtbar setzen
         frame.setVisible(true);
     }
 
     public void actionPerformed(ActionEvent action){
+    	  //neue Produktbezeichnung
     	  String artikelBezeichnung = textBezeichnung.getText();
+    	  
+    	  //neue Kategorie
           String kategorie =(String) comboKategorie.getSelectedItem();
+          
+          //neuen Preis auf notwendigen Typ casten
           String preis = textPreis.getText();
           double price;
           try {
@@ -146,6 +171,8 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
           catch (NumberFormatException e) {
           	price = 0.00;
           }
+          
+          //neues Gewicht auf notwendigen Typ casten
           String gewicht = textGewicht.getText();  
           double gew;
           try {
@@ -154,6 +181,8 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
           catch (NumberFormatException e) {
           	gew = 0.00;
           }
+          
+          //neue Anzahl auf notwendigen Typ casten
           String anzahl = textAnzahl.getText();
           int anz;
           try {
@@ -162,6 +191,8 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
           catch (NumberFormatException e) {
           	anz = -1;
           }
+          
+          //neue Platznummer auf notwendigen Typ casten
           String nummer = textPlatznummer.getText();
           int number;
           try {
@@ -171,13 +202,13 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
           	number = -1;
           }
           
-          
+          //Fenster zum hinzufügen einer Kategorie öffnen
           if (action.getSource() == btnKategorieAdd){
           		GuiKategorieAdd fenster = new GuiKategorieAdd();
 
           	}
 
-          
+          //Vorgang abbrechen und zurück zum Hauptfenster kehren
           if (action.getSource() == btnAbbrechen){
               frame.dispose();
               GuiHauptfenster fenster = new GuiHauptfenster();
@@ -186,13 +217,14 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
          
          
           	
-
+            //Eingabe auf Korrektheit und Vollständigkeit prüfen
           	if (action.getSource() == btnArtikelChange){
           		 if (gew == 0.00||anz==-1||number==-1||kategorie==null||artikelBezeichnung==null) {
                    	JOptionPane.showMessageDialog((Component)null, "Bitte fuellen Sie alle Felder korrekt aus");
                    }
                    else {
                 	   	
+                	   //Artikel verändern
                 	   Artikel neuerArtikel = new Src.Artikel(artikelBezeichnung, kategorie, anz, gew, price, number);
                 	   boolean test = Src.Datenverwaltung.changeArtikel(changeName, neuerArtikel);
                 	   if (test == true) {

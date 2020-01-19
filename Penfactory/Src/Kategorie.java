@@ -98,6 +98,12 @@ public class Kategorie {
 		}
 	}
 	
+	/**
+	 * Vergleiche ob 2 kategorien gleich sind
+	 * 
+	 * @param b Die zweite Kategorie, die mit der verglichen wird auf welcher die funktion aufgerufen wurde
+	 * @returnboolean Gibt true zuruck wenn die Kategorien gleich sind. False andernfalls
+	 */
 	public boolean equals(Kategorie b) {
 		if (this.name.equalsIgnoreCase(b.name) && this.artikelAnzahl == b.artikelAnzahl) {
 			return true;

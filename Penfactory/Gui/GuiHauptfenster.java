@@ -9,6 +9,10 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import Src.*;
 
+/*
+ * Klasse zum erstellen des Hauptfensters, auf welchem alle Artikel in einer Tabelle ausgegeben werden, sich die 
+ * Suchfunktion befindet und von dem alle weiteren Funktionen gestartet werden
+ */
 
 public class GuiHauptfenster implements ActionListener{
 
@@ -31,8 +35,10 @@ public class GuiHauptfenster implements ActionListener{
     GridBagConstraints gridUnten;
     JComboBox comboEigenschaft;
     
-
+    
     public GuiHauptfenster(){
+    		
+    		//Grundgerüst des Frames und seiner Komponenten erstellen
     		table = new JTable();
     		artikel = Src.Datenverwaltung.getAList();
             frame = new JFrame("Artikelverwaltung");
@@ -42,15 +48,23 @@ public class GuiHauptfenster implements ActionListener{
             oben = new JPanel(new GridBagLayout());
             unten = new JPanel(new GridBagLayout());
             mitte = new JPanel();
+           
+            
+            //ActionListener hinzufügen
             btnArtikelAdd.addActionListener(this);
             btnArtikelChange.addActionListener(this);
             btnArtikelDel.addActionListener(this);
             btnKategorien.addActionListener(this);
             btnSuche.addActionListener(this);
             textsuche.addActionListener(this);
-            System.out.println(artikel.size());
-            createTabel(artikel);
+           
+            //erstellen der Tabelle mit allen vorhandenen Artikeln
+            createTabel(artikel); 
+            
+            //Drop-Down-Menü erstellen und befüllen
             comboEigenschaft = new JComboBox(Src.Eigenschaft.values());
+            
+            //Grid für den Frameaufbau erstellen 
             gridOben = new GridBagConstraints();
             gridUnten = new GridBagConstraints();
             gridOben.insets = new Insets(20,10,30,10);
@@ -79,23 +93,32 @@ public class GuiHauptfenster implements ActionListener{
             gridUnten.gridx = 3;
             gridUnten.gridy = 0;
             unten.add(btnKategorien, gridUnten);
+            
+            //Frame mit Panels füllen 
             komplett.add(oben);
             komplett.add(mitte);
             komplett.add(unten);
             frame.getContentPane().add(komplett);
+            
+            //Frame für den Benutzer sichtbar schalten
             frame.setVisible(true);
 
     }
 
         public void actionPerformed(ActionEvent action){
+        	
+        	//Eigenschaft für die Suche aus dem Drop-Down-Menü
         	Eigenschaft eigenschaft = (Eigenschaft) comboEigenschaft.getSelectedItem();
+        	//Text nach welchem gesucht werden sull aus dem Textfeld
         	String suchText = textsuche.getText();
         	
+        	//Button welcher ein neues Fenster zum hinzufügen eines Artikels öffnen
             if (action.getSource() == btnArtikelAdd){
                 frame.dispose();
                 GuiArtikelAdd neuesFenster = new GuiArtikelAdd();
             }
 
+            //Button welcher ein Fenster zum bearbeiten den ausgewählten Artikels öffnet
             if (action.getSource() == btnArtikelChange){
                 
            	 int i = table.getSelectedRow();
@@ -111,7 +134,7 @@ public class GuiHauptfenster implements ActionListener{
         }
                 
             
-
+            //Button welcher die Sicherheitsabfrage öffnet ob der ausgewählte Artikel wirklich gelöscht werden soll
             if (action.getSource() == btnArtikelDel){
             	 int i = table.getSelectedRow();
                  if(i >= 0){
@@ -127,15 +150,18 @@ public class GuiHauptfenster implements ActionListener{
                  }
             }
 
+            /*
+             * Button welcher nach dem Text aus dem Textfeld in der ausgewählten Eigenschaft sucht und 
+             * die Ergebnisse in die Tabelle schreibt.
+             */
             if (action.getSource() == btnSuche){
 
            	 	DefaultTableModel model = (DefaultTableModel) table.getModel();
             	List<Artikel> suchliste = Src.Datenverwaltung.search(suchText, eigenschaft);
-            	createTabel(suchliste);
-            	
-                
+            	createTabel(suchliste);    
             }
             
+            //Button welcher ein Fenster zum bearbeiten, hinzufügen und löschen von Kategorien öffnet 
             if(action.getSource() == btnKategorien) {
             	frame.dispose();
             	GuiKategorie neuesFenster = new GuiKategorie();
@@ -143,16 +169,17 @@ public class GuiHauptfenster implements ActionListener{
             
         }
 
+        //Funktion zum erstellen und befüllen der Tabelle mit einer Liste
         public void createTabel(List<Artikel> aListe){
+        	
+        	//Erstellen einer leeren Tabelle und festlegen der Spalten beschriftung
         	DefaultTableModel model = new DefaultTableModel();
         	model.setRowCount(0);
         	Object[] columns = {"Artikelbezeichnung","Kategorie","Preis","Anzahl", "Platznummer", "Gewicht"};
             model.setColumnIdentifiers(columns);
-            
-            // set the model to the table
             table.setModel(model);
             
-            // Change A JTable Background Color, Font Size, Font Color, Row Height
+            // Festlegen der Tabelleneigenschaften
             table.setBackground(Color.LIGHT_GRAY);
             table.setForeground(Color.black);
             Font font = new Font("",1,11);
@@ -165,8 +192,8 @@ public class GuiHauptfenster implements ActionListener{
             
             
             int a_list_size = aListe.size();
-            System.out.println(a_list_size);
             
+            //Befüllen der Tabelle mit den Daten aus der Liste
             for (int i = 0; i < a_list_size; i++) {
             	System.out.println("add");
             	String[] row = new String[6];
@@ -188,7 +215,10 @@ public class GuiHauptfenster implements ActionListener{
     			
     		}
     		
+            // Befüllte Tabelle dem Frame hinzufügen
     		mitte.add(pane);
+    		
+    		//Frame updaten um neu befüllte Tabelle anzuzeigen
     		SwingUtilities.updateComponentTreeUI(frame);
     		
             

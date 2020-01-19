@@ -3,3 +3,6 @@ BleiswstiftƢSchreibaredfgnƢ40Ƣ3.5Ƣ4.23Ƣ876543
 BleistddiftƢSchreibarasdenƢ30Ƣ3.5Ƣ1.33Ƣ242424
 BleistihftftƢSchreibargdfenƢ60Ƣ3.5Ƣ12.3Ƣ50505
 TasseƢSchreibaredfgnƢ20Ƣ0.5Ƣ23.11Ƣ123333
+AktenKofferƢAktenƢ100Ƣ5.0Ƣ32.0Ƣ1234
+TestƢSchreibaredfgnƢ500Ƣ2.0Ƣ0.0Ƣ2555
+Bleistift 0.5ƢStifteƢ100Ƣ0.2Ƣ2.99Ƣ5344

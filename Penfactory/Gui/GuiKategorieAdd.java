@@ -2,14 +2,13 @@ package Gui;
 
 import java.awt.*;
 import javax.swing.*;
-
-import com.sun.istack.internal.localization.NullLocalizable;
-import com.sun.org.apache.xml.internal.dtm.ref.DTMDefaultBaseIterators.ParentIterator;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import Src.*;
 
+/*
+ * Fenster zum Erstellen einer neuen Kategorie
+ */
 
 public class GuiKategorieAdd implements ActionListener{
 
@@ -23,13 +22,18 @@ public class GuiKategorieAdd implements ActionListener{
     GridBagConstraints gridPanel;
 
     public GuiKategorieAdd(){
+    	//Frame Grundgerüst erstellen
         frame = new JFrame("Kategorie hinzufuegen");
         frame.setSize(800,200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        panel = new JPanel(new GridBagLayout());
+        
+        //ActionListener hinzufügen
         btnAbbrechen.addActionListener(this);
         btnAddKategorie.addActionListener(this);
         textName.addActionListener(this);
+        
+        //Grid für den Frame erstellen und befüllen
+        panel = new JPanel(new GridBagLayout());
         gridPanel = new GridBagConstraints();
         gridPanel.insets = new Insets(10,5,20,5);
         gridPanel.gridx = 1;
@@ -47,13 +51,20 @@ public class GuiKategorieAdd implements ActionListener{
         gridPanel.gridx = 1;
         gridPanel.gridy = 2;
         panel.add(btnAddKategorie, gridPanel);
+        
+        //Panel dem Frame hinzufügen
         frame.getContentPane().add(panel);
+        
+        //Frame für den Benutzer sichtbar setzen
         frame.setVisible(true);
     }
 
      public void actionPerformed(ActionEvent action){
+    	 	
+    	 		//Name der neuen Kategorie
                 String kategorieName = textName.getText();
 
+                //Hinzufügen einer neuen Kategorie mit 0 Artikeln
                 if (action.getSource() == btnAddKategorie){
                     
                     Kategorie k =  new Src.Kategorie(kategorieName, 0);
@@ -68,6 +79,7 @@ public class GuiKategorieAdd implements ActionListener{
                     
                 }
 
+                //fenster schließen
                 if (action.getSource() == btnAbbrechen){
                     frame.dispose();
                 }

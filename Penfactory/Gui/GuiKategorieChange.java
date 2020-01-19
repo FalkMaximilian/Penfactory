@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import Src.*;
 
+/*
+ * Fenster zum verändern des Namens einer bereits bestehenden Kategorie
+ */
 
 public class GuiKategorieChange implements ActionListener {
 	
@@ -20,15 +23,25 @@ public class GuiKategorieChange implements ActionListener {
 	    GridBagConstraints gridPanel;
 
 	    public GuiKategorieChange(Kategorie kategorie){
+	    	
+	    	//erstellen des Grundgerüsts des Frames
 	        frame = new JFrame("Kategorie aendern");
 	        frame.setSize(800,200);
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	        panel = new JPanel(new GridBagLayout());
+	        
+	        //ActioListener hinzufügen
 	        btnAbbrechen.addActionListener(this);
 	        btnChangeKategorie.addActionListener(this);
-	        altKategorie = kategorie;
-	        textName.setText(kategorie.name);
 	        textName.addActionListener(this);
+	        
+	        //speichern der alten Kategorie
+	        altKategorie = kategorie;
+	        
+	        //Textfeld mit aktuellem Namen befüllen
+	        textName.setText(kategorie.name);
+	     
+	        //Grid für den Frame erstellen und befüllen
 	        gridPanel = new GridBagConstraints();
 	        gridPanel.insets = new Insets(10,5,20,5);
 	        gridPanel.gridx = 1;
@@ -46,13 +59,20 @@ public class GuiKategorieChange implements ActionListener {
 	        gridPanel.gridx = 1;
 	        gridPanel.gridy = 2;
 	        panel.add(btnChangeKategorie, gridPanel);
+	        
+	        //Frame mit Panel befüllen
 	        frame.getContentPane().add(panel);
+	        
+	        //Frame für Benutzer sichtbar setzen
 	        frame.setVisible(true);
 	    }
 
 	     public void actionPerformed(ActionEvent action){
+	    	 
+	    	 		//neuer Kategoriename
 	                String neuName = textName.getText();
 
+	                //verändern des Kategorienamens
 	                if (action.getSource() == btnChangeKategorie){
 	                    
 	                    boolean test = Src.Datenverwaltung.changeKategorie(altKategorie.name, new Kategorie(neuName, altKategorie.artikelAnzahl));
@@ -67,6 +87,7 @@ public class GuiKategorieChange implements ActionListener {
 	                    
 	                }
 
+	                //Vorgang abbrechen und schließen des Fensters
 	                if (action.getSource() == btnAbbrechen){
 	                    frame.dispose();
 	                    GuiKategorie neuesFenster = new GuiKategorie();
