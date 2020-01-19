@@ -55,7 +55,6 @@ public class GuiKategorieAdd implements ActionListener{
                     Kategorie k =  new Src.Kategorie(kategorieName, 0);
                     boolean test = Src.Datenverwaltung.addKategorie(k);
                     if (test==true) {
-                    	Src.Datenverwaltung.save_k_list();
                     	JOptionPane.showMessageDialog((Component)null, "Kategorie " + kategorieName + " wurde hinzugefuegt");
                     	frame.dispose();
                     }

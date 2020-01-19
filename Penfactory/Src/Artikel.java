@@ -253,7 +253,7 @@ public class Artikel extends Object {
 	 * @return boolean Es wird true zurueckgegeben, wenn die Artikel gleich sind. False andernfalls.
 	 */
 	public boolean equals(Artikel b) {
-		if (this.produktBezeichnung.toLowerCase() == b.produktBezeichnung.toLowerCase()) {
+		if (this.produktBezeichnung.equalsIgnoreCase(b.produktBezeichnung)) {
 			return true;	// Gib true zurueck falls die Produktbezeichnung die gleiche ist.
 		} else {
 			return false;	// Gib false zurueck, falls die Produktbezeichnung nicht die gleiche ist.

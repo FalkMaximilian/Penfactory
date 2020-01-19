@@ -55,10 +55,10 @@ public class GuiKategorieChange implements ActionListener {
 
 	                if (action.getSource() == btnChangeKategorie){
 	                    
-	                    boolean test = Src.Datenverwaltung.changeKategorie(neuName, altKategorie);
+	                    boolean test = Src.Datenverwaltung.changeKategorie(altKategorie.name, new Kategorie(neuName, altKategorie.artikelAnzahl));
 	                    if (test == true) {
-	                    	JOptionPane.showMessageDialog((Component)null, "Kategorie " + altKategorie.name + "heisst jetz" + neuName);
-	                    	Src.Datenverwaltung.save_a_list();
+	                    	JOptionPane.showMessageDialog((Component)null, "Kategorie " + altKategorie.name + "heisst jetzt" + neuName);
+	                    	GuiKategorie neuesFenster = new GuiKategorie();
 	                    	frame.dispose();
 	                    	}
 	                    else {

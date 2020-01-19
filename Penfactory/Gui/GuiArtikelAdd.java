@@ -185,7 +185,6 @@ public class GuiArtikelAdd extends JFrame implements ActionListener{
         		Artikel neuerArtikel = new Src.Artikel(artikelBezeichnung, kategorie, anz, gew, price, number);
         		boolean test = Src.Datenverwaltung.addArtikel(neuerArtikel);
         		if (test==true) {
-        			Src.Datenverwaltung.save_a_list();
         			JOptionPane.showMessageDialog((Component)null, "Artikel " + artikelBezeichnung + " wurde hinzugefuegt");
         			frame.dispose();
         			GuiHauptfenster fenster = new GuiHauptfenster();

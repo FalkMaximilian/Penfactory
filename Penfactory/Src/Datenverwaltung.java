@@ -1,5 +1,4 @@
 package Src;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,6 +11,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.sound.sampled.LineListener;
 
 public class Datenverwaltung {
 	
@@ -179,37 +180,45 @@ public class Datenverwaltung {
 		return a_list;
 	}
 	
+	
+	//TODO: Ändere Trennzeichen von : auf Lamda oder anderes griechisches Ascii symbol
 	public static void load() {
+		String a_list_fileName = "a_list.txt";	// Dateipfad für die Artikel Datenbank
+		String k_list_fileName = "k_list.txt";	// Dateipfad für die Kategorien Datenbank
 		
-		String a_list_fileName = "a_list.txt";
-		String k_list_fileName = "k_list.txt";
-		
+		// Versuche die Artikel Datenbank zu oeffnen. Wenn das nicht geht, wird ein fehler geworfen.
 		try (BufferedReader br = Files.newBufferedReader(Paths.get(a_list_fileName))) {
 			
-			List<String> temp_a_list = new ArrayList<>();
-			temp_a_list = br.lines().collect(Collectors.toList());
+			a_list = new ArrayList<Artikel>();
+			List<String> temp_a_list = new ArrayList<>();	// Erstelle eine neue leere Liste
+			temp_a_list = br.lines().collect(Collectors.toList());	// Jeder Eintrag der Liste ist eine Zeile aus dem txt Dokument
 			
 			for (int i = 0; i < temp_a_list.size(); i++) {
-				String tempElement = temp_a_list.get(i);
-				String[] tempArray = tempElement.split(":");
+				String tempElement = temp_a_list.get(i);	// Nehme das i-te Element aus der Liste.
+				String[] tempArray = tempElement.split("Ƣ");	// Trenne das Element bei jedem :
 				
-				String produktBezeichnung = tempArray[0];
+				String produktBezeichnung = tempArray[0];	// Speichere ProduktBezeichnung und Kategorie in variablen
 				String kategorie = tempArray[1];
 				
+				// Definiere die Variablen anzahl, gewicht, preis und pllatznummer
 				int anzahl;
 				double gewicht;
 				double preis;
 				int platzNummer;
 				
 				try {
+					// Versuche die Anzahl von String zu int zu parsen. Wirft einen Fehler, falls das nicht funktioniert.
 					anzahl = Integer.parseInt(tempArray[2]);
 					try {
-						gewicht = Double.parseDouble(tempArray[3]);
+						// Versuche das Gewicht von String zu double zu parsen. Wirft einen Fehler, falls das nicht funktioniert.
+						gewicht = Double.parseDouble(tempArray[3]);	
 						try {
+							// Versuche den Preis von String zu double zu parsen. Wirft einen Fehler, falls das nicht funktioniert.
 							preis = Double.parseDouble(tempArray[4]);
 							try {
+								// Versuche die Platznummer von String zu int zu parsen. Wirft einen Fehler, falls das nicht funktioniert.
 								platzNummer = Integer.parseInt(tempArray[5]);
-								a_list.add(new Artikel(produktBezeichnung, kategorie, anzahl, gewicht, preis, platzNummer));
+								a_list.add(new Artikel(produktBezeichnung, kategorie, anzahl, gewicht, preis, platzNummer));	// Füge nun den Artikel zur Liste hinzu, da alle Werte korrekt sind.
 							} catch (NumberFormatException s) {
 								System.out.println("LOAD: Fehler beim platzNummer casting!");
 							}
@@ -224,24 +233,27 @@ public class Datenverwaltung {
 				}
 			}
 		} catch (IOException e) {
+			// Erstelle eine neue Artikel Datenbank, da noch keine Vorhanden ist. Sonst wäre kein Fehler geworfen worden.
 			File a_list_file = new File(a_list_fileName);
 			try {
-				Boolean result = a_list_file.createNewFile();
+				Boolean result = a_list_file.createNewFile();	// true, wenn Datei erstellt wurde. False, falls das nicht geklappt hat.
 				if (result) {
 					System.out.println("File: a_list has been created!");
 				}
 			} catch (IOException e1) {
-				System.out.println("Couldn't open a_list file and creating a new one failed.");
+				System.out.println("Couldn't open a_list file and creating a new one failed.");	// Sollte dieser Bllock erreicht werden, so konnte die Datei nicht geoeffnet werden und es konnt auch keine neue Datei angelegt werden.
 			}
 		}
 		
 		try (BufferedReader br = Files.newBufferedReader(Paths.get(k_list_fileName))) {
 			
+			k_list = new ArrayList<Kategorie>();
 			List<String> temp_k_list = new ArrayList<>();
 			temp_k_list = br.lines().collect(Collectors.toList());
+			
 			for (int i = 0; i < temp_k_list.size(); i++) {
 				String tempElement = temp_k_list.get(i);
-				String[] tempArray = tempElement.split(":");
+				String[] tempArray = tempElement.split("Ƣ");
 				
 				String name = tempArray[0];
 				int anzahl;
@@ -266,7 +278,7 @@ public class Datenverwaltung {
 		}
 	}
 	
-	public static void save_a_list() {
+	protected static void save_a_list() {
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter("a_list.txt");
@@ -279,7 +291,7 @@ public class Datenverwaltung {
 				int a_list_size = a_list.size();
 				for (int i = 0; i < a_list_size; i++) {
 					Artikel tempArtikel = a_list.get(i);
-					bw.write(tempArtikel.produktBezeichnung + ":" + tempArtikel.kategorie + ":" + tempArtikel.anzahl + ":" + tempArtikel.gewicht + ":" + tempArtikel.preis + ":" + tempArtikel.platzNummer);
+					bw.write(tempArtikel.produktBezeichnung + "Ƣ" + tempArtikel.kategorie + "Ƣ" + tempArtikel.anzahl + "Ƣ" + tempArtikel.gewicht + "Ƣ" + tempArtikel.preis + "Ƣ" + tempArtikel.platzNummer);
 					bw.newLine();
 					bw.flush();
 				}
@@ -298,7 +310,7 @@ public class Datenverwaltung {
 		}
 	}
 	
-	public static void save_k_list() {
+	protected static void save_k_list() {
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter("k_list.txt");
@@ -311,7 +323,7 @@ public class Datenverwaltung {
 				int k_list_size = k_list.size();
 				for (int i = 0; i < k_list_size; i++) {
 					Kategorie tempKategorie = k_list.get(i);
-					bw.write(tempKategorie.name + ":" + tempKategorie.artikelAnzahl);
+					bw.write(tempKategorie.name + "Ƣ" + tempKategorie.artikelAnzahl);
 					bw.newLine();
 					bw.flush();
 				}
@@ -335,12 +347,18 @@ public class Datenverwaltung {
 		for (int i = 0; i < a_list_size; i++) {
 			Artikel tempElement = a_list.get(i);
 			if (tempElement.equals(neuerArtikel)) {
+				System.out.print("DATENVERWALTUNG -> ADDARTIKEL: Name schon vergeben");
+				return false;
+			} else if (tempElement.platzNummer == neuerArtikel.platzNummer) {
+				System.out.print("DATENVERWALTUNG -> ADDARTIKEL: Platznummer schon vergeben");
 				return false;
 			}
 		}
 		
-		a_list.add(neuerArtikel);
+		//TODO: Kategorie muss aktualisiert werden!
 		
+		a_list.add(neuerArtikel);
+		save_a_list();
 		return true;
 	}
 	
@@ -357,7 +375,7 @@ public class Datenverwaltung {
 		
 		for (int i = 0; i < a_list_size; i++) {
 			Artikel tempArtikel = a_list.get(i);
-			if (tempArtikel.produktBezeichnung == name) {
+			if (tempArtikel.produktBezeichnung.equalsIgnoreCase(name)) {
 				return tempArtikel;
 			}
 		}
@@ -371,8 +389,8 @@ public class Datenverwaltung {
 		
 		for (int i = 0; i < a_list_size; i++) {
 			Artikel tempArtikel = a_list.get(i);
-			if (tempArtikel.produktBezeichnung == name) {
-				if (tempArtikel.kategorie.toLowerCase() != a.kategorie.toLowerCase()) {
+			if (tempArtikel.produktBezeichnung.equalsIgnoreCase(name)) {
+				if (!tempArtikel.kategorie.equalsIgnoreCase(name)) {
 					int katIndex = stringToKatIndex(tempArtikel.kategorie);
 					int newKatIndex = stringToKatIndex(a.kategorie);
 					
@@ -384,8 +402,10 @@ public class Datenverwaltung {
 					
 					k_list.set(katIndex, oldKategorie);
 					k_list.set(newKatIndex, newKategorie);
+					save_k_list();
 				}
 				a_list.set(i, a);
+				save_a_list();
 				return true;
 			}
 		}
@@ -399,18 +419,20 @@ public class Datenverwaltung {
 		
 		for (int i = 0; i < a_list_size; i++) {
 			Artikel tempArtikel = a_list.get(i);
-			if (tempArtikel.produktBezeichnung.toLowerCase() == name.toLowerCase()) {
+			if (tempArtikel.produktBezeichnung.equalsIgnoreCase(name)) {
 				int katIndex = stringToKatIndex(tempArtikel.kategorie);
 				if (katIndex > -1) {
 					Kategorie tempKategorie = k_list.get(katIndex);
 					tempKategorie.decrease();
 					k_list.set(katIndex, tempKategorie);
+					save_k_list();
 				} else {
 					System.out.println("DATENVERWALTUNG -> DELETEARTIKEL: Kategorie konnte nicht gefunden werden! Index out of range!");
 					return false;
 				}
 				
 				a_list.remove(i);
+				save_a_list();
 				return true;
 			}
 		}
@@ -424,11 +446,10 @@ public class Datenverwaltung {
 		
 		for (int i = 0; i < k_list_size; i++) {
 			Kategorie tempKategorie = k_list.get(i);
-			if (tempKategorie.name.toLowerCase() == name.toLowerCase()) {
+			if (tempKategorie.name.equalsIgnoreCase(name)) {
 				return tempKategorie;
 			}
 		}
-		
 		System.out.println("DATENVERWALTUNG -> GETKATEGORIE: Es wurde keine übereinstimmende Kategorie in k_list gefunden.\n" + name);
 		return null;
 	}
@@ -450,6 +471,7 @@ public class Datenverwaltung {
 			}
 		}
 		k_list.add(k);
+		save_k_list();
 		return true;
 	}
 	
@@ -458,16 +480,17 @@ public class Datenverwaltung {
 		
 		for (int i = 0; i < k_list_size; i++) {
 			Kategorie tempElement = k_list.get(i);
-			if (tempElement.name.toLowerCase() == name.toLowerCase()) {
+			if (tempElement.name.equalsIgnoreCase(name)) {
 				k_list.set(i, k);
+				save_k_list();
 				
-				//TODO: Ist die anzahl die in der Kategorie steht korrekt?
 				int a_list_size = a_list.size();
 				for (int j = 0; j < a_list_size; j++) {
 					Artikel tempArtikel = a_list.get(j);
-					if(tempArtikel.kategorie.toLowerCase() == tempElement.name.toLowerCase()) {
+					if(tempArtikel.kategorie.equalsIgnoreCase(tempElement.name)) {
 						tempArtikel.kategorie = k.name;
 						a_list.set(j, tempArtikel);
+						save_a_list();
 					}
 				}
 				return true;
@@ -476,12 +499,12 @@ public class Datenverwaltung {
 		return false;
 	}
 	
-	public static boolean deleteKategorie(String name) {
+	protected static boolean deleteKategorie(String name) {
 		int a_list_size = a_list.size();
 		
 		for (int i = 0; i < a_list_size; i++) {
 			Artikel tempElementArtikel = a_list.get(i);
-			if (tempElementArtikel.kategorie.toLowerCase() == name.toLowerCase()) {
+			if (tempElementArtikel.kategorie.equalsIgnoreCase(name)) {
 				System.out.println("DATENVERWALTUNG -> DELETEKATEGORIE: Kategorie konnte nicht gelöscht werden, da es noch Artikel gibt, die diese zugewiesen haben.");
 				return false;
 			}
@@ -490,7 +513,7 @@ public class Datenverwaltung {
 		int k_list_size = k_list.size();
 		for (int i = 0; i < k_list_size; i++) {
 			Kategorie tempKategorie = k_list.get(i);
-			if (tempKategorie.name.toLowerCase() == name.toLowerCase()) {
+			if (tempKategorie.name.equalsIgnoreCase(name)) {
 				k_list.remove(i);
 				return true;
 			}
@@ -510,7 +533,7 @@ public class Datenverwaltung {
 		
 		for (int i = 0; i < k_list_size; i++) {
 			Kategorie tempElement = k_list.get(i);
-			if(tempElement.name.toLowerCase() == s.toLowerCase()) {
+			if(tempElement.name.equalsIgnoreCase(s)) {
 				return i;
 			}
 		}

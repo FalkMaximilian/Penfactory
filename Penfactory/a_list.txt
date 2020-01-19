@@ -1,6 +1,6 @@
-Bleistiaaft:Schreibaredfgn:50:3.5:4.99:123456
-Bleiswstift:Schreibaredfgn:40:3.5:4.99:876543
-Bleistddift:Schreibarasden:30:3.5:4.99:242424
-Bleierstift:Schreibaasdren:20:3.5:4.99:353535
-Bleiertstift:Schreibardfgen:10:3.5:4.99:464646
-Bleistihftft:Schreibargdfen:60:3.5:4.99:050505
+BleistiaaftƢSchreibaredfgnƢ50Ƣ3.5Ƣ0.0Ƣ123456
+BleiswstiftƢSchreibaredfgnƢ40Ƣ3.5Ƣ0.0Ƣ876543
+BleistddiftƢSchreibarasdenƢ30Ƣ3.5Ƣ0.0Ƣ242424
+BleierstiftƢStifteƢ20Ƣ3.5Ƣ0.0Ƣ353535
+BleiertstiftƢSchreibardfgenƢ10Ƣ3.5Ƣ0.0Ƣ464646
+BleistihftftƢSchreibargdfenƢ60Ƣ3.5Ƣ0.0Ƣ50505

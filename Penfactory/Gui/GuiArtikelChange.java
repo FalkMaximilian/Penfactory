@@ -196,7 +196,6 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
                 	   Artikel neuerArtikel = new Src.Artikel(artikelBezeichnung, kategorie, anz, gew, price, number);
                 	   boolean test = Src.Datenverwaltung.changeArtikel(changeName, neuerArtikel);
                 	   if (test == true) {
-                		   Src.Datenverwaltung.save_a_list();
                 		   JOptionPane.showMessageDialog((Component)null, "Artikel " + artikelBezeichnung + " wurde veraendert");
                 		   frame.dispose();
                 		   GuiHauptfenster fenster = new GuiHauptfenster();

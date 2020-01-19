@@ -62,7 +62,8 @@ public class GuiKategorie implements ActionListener{
 	}
 	
     public void actionPerformed(ActionEvent action){
-    	Kategorie kat = (Kategorie) comboKategorie.getSelectedItem();
+    	Kategorie kat = Datenverwaltung.getKategorie((String) comboKategorie.getSelectedItem());
+    			
 		
     	if (action.getSource() == btnKategorieAdd) {
     		GuiKategorieAdd neuesFenster = new GuiKategorieAdd();

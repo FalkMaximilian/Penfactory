@@ -1,5 +1,4 @@
 package Src;
-
 /**
 * Die Klasse Kategorie besitzt die Attribute "name" und "artikelAnzahl"
 * welche Speichern, wieviele Artikel unter einer bestimmten Kategorie
@@ -100,7 +99,7 @@ public class Kategorie {
 	}
 	
 	public boolean equals(Kategorie b) {
-		if (this.name.toLowerCase() == b.name.toLowerCase() && this.artikelAnzahl == b.artikelAnzahl) {
+		if (this.name.equalsIgnoreCase(b.name) && this.artikelAnzahl == b.artikelAnzahl) {
 			return true;
 		} else {
 			return false;
