@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.sound.sampled.LineListener;
@@ -180,11 +181,16 @@ public class Datenverwaltung {
 		return a_list;
 	}
 	
+	public static List<Double> getGList() {
+		return regalGewicht;
+	}
+	
 	
 	//TODO: Ändere Trennzeichen von : auf Lamda oder anderes griechisches Ascii symbol
 	public static void load() {
 		String a_list_fileName = "a_list.txt";	// Dateipfad für die Artikel Datenbank
 		String k_list_fileName = "k_list.txt";	// Dateipfad für die Kategorien Datenbank
+		String g_list_fileName = "g_list.txt";	// Dateipfad für die Gewichts Datenbank	
 		
 		// Versuche die Artikel Datenbank zu oeffnen. Wenn das nicht geht, wird ein fehler geworfen.
 		try (BufferedReader br = Files.newBufferedReader(Paths.get(a_list_fileName))) {
@@ -276,6 +282,35 @@ public class Datenverwaltung {
 				System.out.println("Couldn't open k_list file and creating a new one failed.");
 			}
 		}
+		
+		try (BufferedReader br = Files.newBufferedReader(Paths.get(g_list_fileName))) {
+			regalGewicht = new ArrayList<Double>();
+			List<String> temp_g_list = new ArrayList<>();
+			temp_g_list = br.lines().collect(Collectors.toList());
+			
+			for (int i = 0; i < 1000; i++) {
+				String tempElement = temp_g_list.get(i);
+				
+				double gewicht;
+				try {
+					gewicht = Double.parseDouble(tempElement);
+					regalGewicht.add(gewicht);
+				} catch (NumberFormatException e) {
+					System.out.println("LOAD: Fehler beim gewicht casting!");
+				}
+			}
+		} catch (Exception e) {
+			File g_list_file = new File(g_list_fileName);
+			try {
+				Boolean result = g_list_file.createNewFile();
+				if (result) {
+					System.out.println("File: regalGewicht has been created!");
+					//TODO: 1000 Zeilen mit 0 einfügen
+				}
+			} catch (Exception e2) {
+				System.out.println("Couldn't open k_list file and creating a new one failed.");
+			}
+		}
 	}
 	
 	protected static void save_a_list() {
@@ -341,6 +376,35 @@ public class Datenverwaltung {
 		}
 	}
 	
+	protected static void save_g_list() {
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter("g_list.txt");
+			writer.close();
+			
+			BufferedWriter bw = null;
+			try {
+				bw = new BufferedWriter(new FileWriter("g_list.txt", true));
+				for (int i = 0; i < 1000; i++) {
+					double tempGewicht = regalGewicht.get(i);
+					bw.write(Double.toString(tempGewicht));
+					bw.newLine();
+					bw.flush();
+				}
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			} finally {
+				if (bw != null) try {
+					bw.close();
+				} catch (IOException ioe2) {
+					//Just ignore it
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static boolean addArtikel(Artikel neuerArtikel) {
 		
 		int a_list_size = a_list.size();
@@ -355,11 +419,29 @@ public class Datenverwaltung {
 			}
 		}
 		
-		//TODO: Kategorie muss aktualisiert werden!
-		
-		a_list.add(neuerArtikel);
-		save_a_list();
-		return true;
+		int katIndex = stringToKatIndex(neuerArtikel.kategorie);
+		if (katIndex != -1) {
+			Kategorie kat = k_list.get(katIndex);
+			kat.decrease();
+			
+			int nummer = (int) (neuerArtikel.platzNummer/1000);
+			double gewicht = regalGewicht.get(nummer);
+			gewicht += (neuerArtikel.gewicht * neuerArtikel.anzahl);
+			
+			if (gewicht < 10000) {
+				regalGewicht.set(nummer, gewicht);
+				save_g_list();
+				
+				k_list.set(katIndex, kat);
+				save_k_list();
+				
+				a_list.add(neuerArtikel);
+				save_a_list();
+				
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -390,20 +472,48 @@ public class Datenverwaltung {
 		for (int i = 0; i < a_list_size; i++) {
 			Artikel tempArtikel = a_list.get(i);
 			if (tempArtikel.produktBezeichnung.equalsIgnoreCase(name)) {
+				
+				int katIndex = stringToKatIndex(tempArtikel.kategorie);
+				int newKatIndex = stringToKatIndex(a.kategorie);
+				
+				Kategorie oldKategorie = k_list.get(katIndex);
+				Kategorie newKategorie = k_list.get(newKatIndex);
+				
 				if (!tempArtikel.kategorie.equalsIgnoreCase(name)) {
-					int katIndex = stringToKatIndex(tempArtikel.kategorie);
-					int newKatIndex = stringToKatIndex(a.kategorie);
-					
-					Kategorie oldKategorie = k_list.get(katIndex);
-					Kategorie newKategorie = k_list.get(newKatIndex);
-					
 					oldKategorie.decrease();
 					newKategorie.increase();
-					
-					k_list.set(katIndex, oldKategorie);
-					k_list.set(newKatIndex, newKategorie);
-					save_k_list();
 				}
+				
+				int platzNummerAlt = (int) (tempArtikel.platzNummer / 1000);
+				int platzNummerNeu = (int) (a.platzNummer / 1000);
+				
+				if (platzNummerAlt != platzNummerNeu) {
+					for (int j = 0; j < a_list_size && j != i; j++) {
+						Artikel tempArtikel2 = a_list.get(j);
+						if (platzNummerNeu == tempArtikel2.platzNummer) {
+							return false;
+						}
+					}
+				}
+				
+				if (tempArtikel.anzahl != a.anzahl) {
+					double gewichtAlt = regalGewicht.get(platzNummerAlt);
+					gewichtAlt -= tempArtikel.anzahl * tempArtikel.gewicht;
+					regalGewicht.set(platzNummerAlt, gewichtAlt);
+					
+					double gewichtNeu = regalGewicht.get(platzNummerNeu);
+					gewichtNeu += a.anzahl * a.gewicht;
+					
+					if (gewichtNeu < 10000) {
+						regalGewicht.set(platzNummerNeu, gewichtNeu);
+						save_g_list();
+					}
+				}
+				
+				k_list.set(katIndex, oldKategorie);
+				k_list.set(newKatIndex, newKategorie);
+				save_k_list();
+				
 				a_list.set(i, a);
 				save_a_list();
 				return true;
@@ -424,16 +534,23 @@ public class Datenverwaltung {
 				if (katIndex > -1) {
 					Kategorie tempKategorie = k_list.get(katIndex);
 					tempKategorie.decrease();
+					
+					int regalNummer = (int) tempArtikel.platzNummer / 1000;
+					double gewicht = regalGewicht.get(regalNummer);
+					gewicht -= (tempArtikel.gewicht * tempArtikel.anzahl);
+					regalGewicht.set(regalNummer, gewicht);
+					save_g_list();
+					
 					k_list.set(katIndex, tempKategorie);
 					save_k_list();
+					
+					a_list.remove(i);
+					save_a_list();
+					return true;
 				} else {
 					System.out.println("DATENVERWALTUNG -> DELETEARTIKEL: Kategorie konnte nicht gefunden werden! Index out of range!");
 					return false;
 				}
-				
-				a_list.remove(i);
-				save_a_list();
-				return true;
 			}
 		}
 		
@@ -526,7 +643,7 @@ public class Datenverwaltung {
 	/**
 	 * 
 	 * @param s Ein String der dem namen der gesuchten kategorie bis auf die großschreibung übereinstimmen muss. 
-	 * @return
+	 * @return int Der index der Aktegorie wird zurueckgegeben. Wird die Kategorie nicht gefunden, so wird -1 returned.
 	 */
 	private static int stringToKatIndex(String s) {
 		int k_list_size = k_list.size();
