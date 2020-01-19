@@ -15,7 +15,7 @@ public class GuiKategorieChange implements ActionListener {
 	    JLabel ueberschrift = new JLabel("Kategorie aendern");
 	    JLabel name = new JLabel("Kategoriename");
 	    JTextField textName = new JTextField(100);
-	    JButton btnChangeKategorie = new JButton("Kategorie aendern");
+	    JButton btnChangeKategorie = new JButton("Okay");
 	    JButton btnAbbrechen = new JButton("Abbrechen");
 	    GridBagConstraints gridPanel;
 
@@ -57,6 +57,7 @@ public class GuiKategorieChange implements ActionListener {
 	                    frame.dispose();
 	                    Src.Datenverwaltung.changeKategorie(neuName, altKategorie);
 	                    JOptionPane.showMessageDialog((Component)null, "Kategorie " + altKategorie.name + "heisst jetz" + neuName);
+	                    Src.Datenverwaltung.save_a_list();
 	                }
 
 	                if (action.getSource() == btnAbbrechen){

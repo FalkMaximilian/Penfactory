@@ -1,4 +1,5 @@
 package Src;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -43,7 +44,26 @@ public class Datenverwaltung {
 		List<Artikel> searchResult = new ArrayList<>(); // Eine leere Liste, die am Ende mit allen gefundenen Objekten zurückgegeben wird.
 		int a_list_size = a_list.size();				// Länge der Liste
 		
-		if (para == Eigenschaft.Produktbezeichnung) { 	// Wenn nach der Produktbezeichnung gesucht wird
+		if (para == Eigenschaft.Alle) {
+			for (int i = 0; i < a_list_size; i++) {
+				Artikel tempArtikel = a_list.get(i);
+				
+				if (tempArtikel.produktBezeichnung.contains(wert)) {
+					searchResult.add(tempArtikel);
+				} else if (tempArtikel.kategorie.contains(wert)) {
+					searchResult.add(tempArtikel);
+				} else if (Integer.toString(tempArtikel.anzahl).contains(wert)) {
+					searchResult.add(tempArtikel);
+				} else if (Double.toString(tempArtikel.gewicht).contains(wert)) {
+					searchResult.add(tempArtikel);
+				} else if (Double.toString(tempArtikel.preis).contains(wert)) {
+					searchResult.add(tempArtikel);
+				} else if (Integer.toString(tempArtikel.platzNummer).contains(wert)) {
+					searchResult.add(tempArtikel);
+				}
+			}
+			return searchResult;
+		} else if (para == Eigenschaft.Produktbezeichnung) { 	// Wenn nach der Produktbezeichnung gesucht wird
 			for (int i = 0; i < a_list_size; i++) {		// Überprüfe jedes Element der Liste
 				Artikel tempElement = a_list.get(i);	// Hole das aktuelle Element
 				if (tempElement.produktBezeichnung.contains(wert)) {

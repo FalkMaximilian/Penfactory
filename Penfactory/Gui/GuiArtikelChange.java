@@ -48,12 +48,16 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
         frame.setSize(800, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         textBezeichnung.setText(artikel.produktBezeichnung);
-        textAnzahl.setText(artikel.anzahl); //Casten
-        textGewicht.setText(artikel.gewicht);
-        textPlatznummer.setText(artikel.platzNummer);
-        textPreis.setText(artikel.preis);
+        String anz = Integer.toString(artikel.anzahl);
+        textAnzahl.setText(anz); 
+        String gew = Double.toString(artikel.gewicht);
+        textGewicht.setText(gew);
+        String nummer = Integer.toString(artikel.platzNummer);
+        textPlatznummer.setText(nummer);
+        String price = Double.toString(artikel.preis);
+        textPreis.setText(price);
         btnKategorieAdd = new JButton("Kategorie hinzufuegen");
-        btnArtikelChange = new JButton("Artikel verändern");
+        btnArtikelChange = new JButton("Okay");
         btnAbbrechen = new JButton("Abbrechen");
         comboKategorie = new JComboBox(Src.Datenverwaltung.getKList().toArray());
         comboKategorie.setSelectedItem(artikel.kategorie);
@@ -127,32 +131,71 @@ public class GuiArtikelChange extends JFrame implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent action){
-        String artikelBezeichnung = textBezeichnung.getText();
-        String kategorie =(String) comboKategorie.getSelectedItem(); //Casten!!
-        String preis = textPreis.getText();
-        String gewicht = textGewicht.getText();
-        String anzahl = textAnzahl.getText();
-        String nummer = textPlatznummer.getText();
+    	  String artikelBezeichnung = textBezeichnung.getText();
+          String kategorie =(String) comboKategorie.getSelectedItem();
+          String preis = textPreis.getText();
+          double price;
+          try {
+          	price = Double.parseDouble(preis);
+          }
+          catch (NumberFormatException e) {
+          	price = 0.00;
+          }
+          String gewicht = textGewicht.getText();  
+          double gew;
+          try {
+          	gew = Double.parseDouble(gewicht);
+          }
+          catch (NumberFormatException e) {
+          	gew = 0.00;
+          }
+          String anzahl = textAnzahl.getText();
+          int anz;
+          try {
+          	anz = Integer.parseInt(anzahl);
+          }
+          catch (NumberFormatException e) {
+          	anz = -1;
+          }
+          String nummer = textPlatznummer.getText();
+          int number;
+          try {
+          	number = Integer.parseInt(nummer);
+          }
+          catch (NumberFormatException e) {
+          	number = -1;
+          }
+          
+          
+          if (action.getSource() == btnKategorieAdd){
+          		GuiKategorieAdd fenster = new GuiKategorieAdd();
 
-        if (action.getSource() == btnKategorieAdd){
-            GuiKategorieAdd fenster = new GuiKategorieAdd();
+          	}
 
-        }
+          
+          if (action.getSource() == btnAbbrechen){
+              frame.dispose();
+              GuiHauptfenster fenster = new GuiHauptfenster();
 
-        if (action.getSource() == btnAbbrechen){
-            frame.dispose();
-            GuiHauptfenster fenster = new GuiHauptfenster();
+          }
+         
+         
+          	
 
-        }
+          	if (action.getSource() == btnArtikelChange){
+          		 if (gew == 0.00||anz==-1||number==-1||kategorie==null||artikelBezeichnung==null) {
+                   	JOptionPane.showMessageDialog((Component)null, "Bitte fuellen Sie alle Felder korrekt aus");
+                   }
+                   else {
+          		
+          		Artikel neuerArtikel = new Src.Artikel(artikelBezeichnung, kategorie, anz, gew, price, number);
+          		Src.Datenverwaltung.changeArtikel(changeName, neuerArtikel);
+          		Src.Datenverwaltung.save_a_list();
+          		JOptionPane.showMessageDialog((Component)null, "Artikel " + artikelBezeichnung + " wurde veraendert");
+          		frame.dispose();
+          		GuiHauptfenster fenster = new GuiHauptfenster();
 
-        if (action.getSource() == btnArtikelChange){
-            frame.dispose();
-            Src.Artikel a = new Src.Artikel(artikelBezeichnung, kategorie, anzahl, gewicht, preis, nummer);  //Casten
-            Src.Datenverwaltung.changeArtikel(changeName, a);
-            JOptionPane.showMessageDialog((Component)null, "Artikel " + artikelBezeichnung + " wurde veraendert");
-            GuiHauptfenster fenster = new GuiHauptfenster();
-
-        }
+          	}
+          }}
     }
 
-}

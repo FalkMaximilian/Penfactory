@@ -1,4 +1,5 @@
 package Src;
+
 /**
 * Die Klasse Kategorie besitzt die Attribute "name" und "artikelAnzahl"
 * welche Speichern, wieviele Artikel unter einer bestimmten Kategorie

@@ -2,6 +2,7 @@ package Gui;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,34 +16,40 @@ public class GuiHauptfenster implements ActionListener{
     JLabel suche = new JLabel("Suche: ");
     JTextField textsuche = new JTextField(40);
     JButton btnSuche = new JButton("suchen");
-    JList<Artikel> artikelliste;  //Array benötigt
-    List<Artikel> artikel = Src.Datenverwaltung.getAList();
+    JTable table;
+    List<Artikel> artikel = null;
+    DefaultTableModel model;
     JPanel oben;
+    JPanel mitte;
     JPanel unten;
     JPanel komplett;
     JButton btnArtikelChange = new JButton("Artikel aendern");
     JButton btnArtikelDel = new JButton("Artikel loeschen");
     JButton btnArtikelAdd = new JButton("Artikel hinzufuegen");
+    JButton btnKategorien = new JButton("Kategorien anzeigen");
     GridBagConstraints gridOben;
     GridBagConstraints gridUnten;
     JComboBox comboEigenschaft;
+    
 
     public GuiHauptfenster(){
+    		table = new JTable();
+    		artikel = Src.Datenverwaltung.getAList();
             frame = new JFrame("Artikelverwaltung");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(800,400);
+            frame.setSize(900,700);
             komplett = new JPanel(new FlowLayout(1, 0, 0));
             oben = new JPanel(new GridBagLayout());
             unten = new JPanel(new GridBagLayout());
+            mitte = new JPanel();
             btnArtikelAdd.addActionListener(this);
             btnArtikelChange.addActionListener(this);
             btnArtikelDel.addActionListener(this);
+            btnKategorien.addActionListener(this);
             btnSuche.addActionListener(this);
             textsuche.addActionListener(this);
-            //artikelliste = new JList (artikel);  //selber Datentyp wie oben
-            //artikelliste.setSize(20,20);
-            //artikelliste.setVisible(true);
-            //artikelliste.addActionListener(this);
+            System.out.println(artikel.size());
+            createTabel(artikel);
             comboEigenschaft = new JComboBox(Src.Eigenschaft.values());
             gridOben = new GridBagConstraints();
             gridUnten = new GridBagConstraints();
@@ -60,8 +67,6 @@ public class GuiHauptfenster implements ActionListener{
             gridOben.gridx = 3;
             gridOben.gridy = 0;
             oben.add(btnSuche, gridOben);
-            //gridOben.gridy = 1;
-            //oben.add(artikelliste);
             gridUnten.gridx = 0;
             gridUnten.gridy = 0;
             unten.add(btnArtikelChange, gridUnten);
@@ -71,8 +76,11 @@ public class GuiHauptfenster implements ActionListener{
             gridUnten.gridx = 2;
             gridUnten.gridy = 0;
             unten.add(btnArtikelAdd, gridUnten);
+            gridUnten.gridx = 3;
+            gridUnten.gridy = 0;
+            unten.add(btnKategorien, gridUnten);
             komplett.add(oben);
-          
+            komplett.add(mitte);
             komplett.add(unten);
             frame.getContentPane().add(komplett);
             frame.setVisible(true);
@@ -89,21 +97,101 @@ public class GuiHauptfenster implements ActionListener{
             }
 
             if (action.getSource() == btnArtikelChange){
-                frame.dispose();
-                //ArtikelChange muss selected artikel Ã¼bergeben werden!!!
-                GuiArtikelChange neuesFenster = new GuiArtikelChange();
-            }
+                
+           	 int i = table.getSelectedRow();
+             if(i >= 0){
+            	 String artName = (String) table.getValueAt(i, 0);
+            	 System.out.println(artName);
+            	 frame.dispose();
+            	 GuiArtikelChange neuesFenster = new GuiArtikelChange(artName);
+             }
+             else{
+            	 JOptionPane.showMessageDialog((Component)null, "Bitte waehlen Sie den Artikel, welchen Sie aendern wollen aus");
+             }
+        }
+                
+            
 
             if (action.getSource() == btnArtikelDel){
-            		//selected von artikelliste
+            	 int i = table.getSelectedRow();
+                 if(i >= 0){
+                	 String artName = (String) table.getValueAt(i, 0);
+                	 System.out.println(artName);
+                	 GuiSafety safetyFenster = new GuiSafety("artikel", artName);
+                	 artikel = Src.Datenverwaltung.getAList();
+                	 DefaultTableModel model = (DefaultTableModel) table.getModel();
+                     createTabel(artikel);
+                 }
+                 else{
+                	 JOptionPane.showMessageDialog((Component)null, "Bitte waehlen Sie den Artikel, welchen Sie loeschen wollen aus");
+                 }
             }
 
             if (action.getSource() == btnSuche){
+
+           	 	DefaultTableModel model = (DefaultTableModel) table.getModel();
             	List<Artikel> suchliste = Src.Datenverwaltung.search(suchText, eigenschaft);
-            	//artikel.setListData = suchliste;
+            	createTabel(suchliste);
+            	
+                
             }
+            
+            if(action.getSource() == btnKategorien) {
+            	frame.dispose();
+            	GuiKategorie neuesFenster = new GuiKategorie();
+            }
+            
         }
 
-
+        public void createTabel(List<Artikel> aListe){
+        	DefaultTableModel model = new DefaultTableModel();
+        	model.setRowCount(0);
+        	Object[] columns = {"Artikelbezeichnung","Kategorie","Preis","Anzahl", "Platznummer", "Gewicht"};
+            model.setColumnIdentifiers(columns);
+            
+            // set the model to the table
+            table.setModel(model);
+            
+            // Change A JTable Background Color, Font Size, Font Color, Row Height
+            table.setBackground(Color.LIGHT_GRAY);
+            table.setForeground(Color.black);
+            Font font = new Font("",1,11);
+            table.setFont(font);
+            table.setRowSelectionAllowed(true);
+            table.enableInputMethods(false);
+            table.setRowHeight(30);
+            
+            JScrollPane pane = new JScrollPane(table);
+            
+            
+            int a_list_size = aListe.size();
+            System.out.println(a_list_size);
+            
+            for (int i = 0; i < a_list_size; i++) {
+            	System.out.println("add");
+            	String[] row = new String[6];
+    			Artikel tmpArtikel = aListe.get(i);
+    			row[0] = tmpArtikel.produktBezeichnung;
+    			row[1] = tmpArtikel.kategorie;
+    			String preis = Double.toString(tmpArtikel.preis);
+    			row[2] = preis;
+    			String anz = Integer.toString(tmpArtikel.anzahl);
+    			row[3] = anz;
+    			String nummer= Integer.toString(tmpArtikel.platzNummer);
+    			row[4] = nummer;
+    			String gew = Double.toString(tmpArtikel.gewicht);
+    			row[5] = gew;
+    			
+    		
+    			model.addRow(row);
+    			
+    			
+    		}
+    		
+    		mitte.add(pane);
+    		SwingUtilities.updateComponentTreeUI(frame);
+    		
+            
+        }
 
 }

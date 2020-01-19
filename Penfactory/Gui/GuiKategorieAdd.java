@@ -13,8 +13,8 @@ public class GuiKategorieAdd implements ActionListener{
     JPanel panel;
     JLabel ueberschrift = new JLabel("Kategorie hinzufuegen");
     JLabel name = new JLabel("Kategoriename");
-    JTextField textName = new JTextField(100);
-    JButton btnAddKategorie = new JButton("Kategorie hinzufuegen");
+    JTextField textName = new JTextField(10);
+    JButton btnAddKategorie = new JButton("Okay");
     JButton btnAbbrechen = new JButton("Abbrechen");
     GridBagConstraints gridPanel;
 
@@ -54,6 +54,7 @@ public class GuiKategorieAdd implements ActionListener{
                     frame.dispose();
                     Kategorie k =  new Src.Kategorie(kategorieName, 0);
                     Src.Datenverwaltung.addKategorie(k);
+                    Src.Datenverwaltung.save_k_list();
                     JOptionPane.showMessageDialog((Component)null, "Kategorie " + kategorieName + " wurde hinzugefuegt");
                 }
 

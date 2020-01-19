@@ -44,7 +44,7 @@ public class GuiArtikelAdd extends JFrame implements ActionListener{
         frame.setSize(800, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         btnKategorieAdd = new JButton("Kategorie hinzufuegen");
-        btnArtikelAdd = new JButton("Artikel hinzufuegen");
+        btnArtikelAdd = new JButton("Okay");
         btnAbbrechen = new JButton("Abbrechen");
         comboKategorie = new JComboBox(kategorieListe.toArray());
         ganzes = new JPanel(new FlowLayout(1, 0, 0));
@@ -120,29 +120,68 @@ public class GuiArtikelAdd extends JFrame implements ActionListener{
         String artikelBezeichnung = textBezeichnung.getText();
         String kategorie =(String) comboKategorie.getSelectedItem();
         String preis = textPreis.getText();
-        String gewicht = textGewicht.getText();  //Casten!!!!
-        String anzahl = textAnzahl.getText();
-        String nummer = textPlatznummer.getText();
-
-        if (action.getSource() == btnKategorieAdd){
-        	GuiKategorieAdd fenster = new GuiKategorieAdd();
-
+        double price;
+        try {
+        	price = Double.parseDouble(preis);
         }
+        catch (NumberFormatException e) {
+        	price = 0.00;
+        }
+        String gewicht = textGewicht.getText();  //Casten!!!!
+        double gew;
+        try {
+        	gew = Double.parseDouble(gewicht);
+        }
+        catch (NumberFormatException e) {
+        	gew = 0.00;
+        }
+        String anzahl = textAnzahl.getText();
+        int anz;
+        try {
+        	anz = Integer.parseInt(anzahl);
+        }
+        catch (NumberFormatException e) {
+        	anz = -1;
+        }
+        String nummer = textPlatznummer.getText();
+        int number;
+        try {
+        	number = Integer.parseInt(nummer);
+        }
+        catch (NumberFormatException e) {
+        	number = -1;
+        }
+        
+        
+        if (action.getSource() == btnKategorieAdd){
+        		GuiKategorieAdd fenster = new GuiKategorieAdd();
 
+        	}
+
+        
         if (action.getSource() == btnAbbrechen){
             frame.dispose();
             GuiHauptfenster fenster = new GuiHauptfenster();
 
         }
+       
+       
+        	
 
-        if (action.getSource() == btnArtikelAdd){
-            frame.dispose();
-            Artikel neuerArtikel = new Src.Artikel(artikelBezeichnung, kategorie, anzahl, gewicht, preis, nummer);
-            Src.Datenverwaltung.addArtikel(neuerArtikel);
-            JOptionPane.showMessageDialog((Component)null, "Artikel " + artikelBezeichnung + " wurde hinzugefuegt");
-            GuiHauptfenster fenster = new GuiHauptfenster();
+        	if (action.getSource() == btnArtikelAdd){
+        		 if (gew == 0.00||anz==-1||number==-1||kategorie==null||artikelBezeichnung==null) {
+        	        	JOptionPane.showMessageDialog((Component)null, "Bitte fuellen Sie alle Felder korrekt aus");
+        	        }
+        	        else {
+        		
+        		Artikel neuerArtikel = new Src.Artikel(artikelBezeichnung, kategorie, anz, gew, price, number);
+        		Src.Datenverwaltung.addArtikel(neuerArtikel);
+        		Src.Datenverwaltung.save_a_list();
+        		JOptionPane.showMessageDialog((Component)null, "Artikel " + artikelBezeichnung + " wurde hinzugefuegt");
+        		frame.dispose();
+        		GuiHauptfenster fenster = new GuiHauptfenster();
 
+        	}
         }
-    }
+    }}
 
-}
